@@ -1,0 +1,16 @@
+#!/bin/bash
+
+walldir="$HOME/Documents/wallpapers/"
+maxpage=5
+
+notify-send "Downloading wallpapers"
+
+for i in $(seq 1 $maxpage);
+do
+  curl -s https://wallhaven.cc/api/v1/search\?atleast\=1920x1080\&resolutions\=1920x1080\&sorting\=toplist\&page\=$i\&q\=$1 > temp.txt
+  page=$(cat temp.txt | jq '.' | grep -Eoh "https:\/\/w\.wallhaven.cc\/full\/.*(jpg|png)\b")
+  wget -nc -P $walldir $page
+done
+rm temp.txt
+notify-send "Download finished"
+ 
